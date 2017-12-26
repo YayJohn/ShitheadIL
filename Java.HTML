@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<body>
+	<!-- creates images for the cards -->
+	<img src="#" id="playerCard0" width="200" height="240" onclick="clickableCards(0)">
+	<img src="#" id="playerCard1" width="200" height="240" onclick="clickableCards(1)">
+	<img src="#" id="playerCard2" width="200" height="240" onclick="clickableCards(2)">
+	<img src="#" id="playerCard3" width="200" height="240" onclick="clickableCards(3)">
+	<img src="#" id="playerCard4" width="200" height="240" onclick="clickableCards(4)">
+	<img src="#" id="playerCard5" width="200" height="240" onclick="clickableCards(5)">
+	<script>
+	//variables
+	var playerCards = [];
+	var playerDeckCards = [];
+	var playerDeckFaceCards = [];
+	var clickedCards = [];
+	var minusNum = 0;
+	var trueCard;
+	var turn = 0;
+	
+	function cardImgs() {
+	
+	var randomNum03;
+	for(i = 0; i < 6; i++) {
+	randomNum03 = Math.floor(Math.random() * 4)
+	switch (randomNum03) {
+	case 0:
+	randomNum03 = "_of_clubs.png";
+	break;
+	case 1:
+	randomNum03 = "_of_diamonds.png"
+	break;
+	case 2:
+	randomNum03 = "_of_hearts.png"
+	break;
+	case 3:
+	randomNum03 = "_of_spades.png"
+	break;
+	}
+	if (playerCards[i] != 15) {
+	document.getElementById("playerCard" + i).src = "CardsImgs/" + playerCards[i] + randomNum03;
+	}
+	else {
+	var randomNum01 = Math.floor(Math.random() * 2)
+	if (randomNum01 == 0) {
+	document.getElementById("playerCard" + i).src = "CardsImgs/black_joker.png";
+	}
+	else {
+	document.getElementById("playerCard" + i).src = "CardsImgs/red_joker.png";
+	}
+	}
+	}
+	}
+	//Does some things when cards are pressed
+	function clickableCards(playerCardNum) {
+	if (beginGame == true) {
+	for (i = 0; i <= clickedCards.length; i++) {
+	if (playerCardNum > clickedCards[i]) {
+	minusNum += 1;
+	}
+	}
+	playerCards.splice(playerCardNum - minusNum, 1)
+	minusNum = 0;
+	clickedCards.push(playerCardNum);
+	
+	if (playerCards.length > 3) {
+	playerDeckFaceCards.push(playerCards[playerCardNum - minusNum])
+	}
+	else {
+	beginGame = false;
+	alert('Let the game begin');
+	}
+	}
+	else {
+	while (playerCards.length < 3) {
+	var randomNum215 = Math.floor(Math.random() * 16 /*16 and not 15 because 15 only generates up to 14*/);
+		while (randomNum215 < 2) {
+		randomNum215 = Math.floor(Math.random() * 16 /*16 and not 15 because 15 only generates up to 14*/);
+		}
+		playerCards.push(randomNum215);
+		//cardImgs();
+		alert(playerCards);
+	}
+	}
+	var removeCards = document.getElementById('playerCard' + playerCardNum);
+	removeCards.parentNode.removeChild(removeCards);
+	}
+	
+	function cardMath() {
+	var playerCard;
+	var enemy1Card;
+	var cardValLim = enemy1Card;
+	
+	switch(playerCard) {
+	case 2:
+	cardValLim = 0;
+	trueCard = true
+	break;
+	case 3:
+	playerCard = enemy1Card;
+	trueCard = true
+	break;
+	case 7:
+	if (7 > enemy1Card) {
+	
+	}
+	break;
+	case 8:
+	if (8 > enemy1Card) {
+	turn + 1
+	}
+	break;
+	}
+	}
+	//Gives the player cards for his deck until he has 3 cards
+	while(playerDeckCards.length < 3) {
+	var randomNum215 = Math.floor(Math.random() * 15);
+		while (randomNum215 < 2) {
+		randomNum215 = Math.floor(Math.random() * 15);
+		}
+		playerDeckCards.push(randomNum215);
+	}
+	//Gives the player cards until he has 6 cards
+	while (playerCards.length < 6) {
+	var randomNum215 = Math.floor(Math.random() * 15);
+		while (randomNum215 < 2) {
+		randomNum215 = Math.floor(Math.random() * 15);
+		}
+		playerCards.push(randomNum215);
+	}
+	//puts the correct pictures on the cards
+	cardImgs()
+	alert('Put three cards on your deck');
+	var beginGame = true;
+	</script>
+	</body>
+</html>
