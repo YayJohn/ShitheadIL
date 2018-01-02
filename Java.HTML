@@ -13,9 +13,11 @@
 	<img src="CardsImgs\front.png" id="playerDeckCard2" width="100" height="120">
 	<script>
 	//Objectives
-		//MAKE ENEMY AI
-		//See playerDeckCards
-		//See playerDeckFaceCards
+		//MAKE ENEMY AI (Hard but rly important)
+		//Add Background img
+		//Change playerCards imgs placing
+		//Change playerDeckCards imgs placing
+		//See playerDeckFaceCards (Still not possible...)
 	//variables
 	let playerCards = [];
 	let playerDeckCards = [];
@@ -52,8 +54,6 @@
 			switch (randomNum03) {
 				case 0:
 					randomNum03 = "_of_clubs.png";
-					//let test = remainingCards + 2
-					//alert(test)
 					break;
 				case 1:
 					randomNum03 = "_of_diamonds.png"
@@ -118,9 +118,9 @@
 				alert('Let the game begin');
 			}
 		} else {
-			const removedCard = playerCards.splice(playerCardNum, 1)
+			const removedCard = playerCards.splice(playerCardNum, 1)		
 			placedCards.push(removedCard)
-			cardImgs(playerCardNum)
+			enemy1AI()
 		}
 		while (playerCards.length < 3) {
 			let randomNum215 = Math.floor(Math.random() * 16 /*16 and not 15 because 15 only generates up to 14*/);
@@ -131,35 +131,48 @@
 			cardImgs(playerCardNum);
 		}
 	}
-	function cardMath() {
-		let playerCard;
-		let enemy1Card;
-		let cardValLim = enemy1Card;
-	
-		switch(playerCard) {
-			case 2:
-				cardValLim = 0;
-				trueCard = true
-				break;
+	function enemy1AI() {
+		const previousPlacedCard = placedCards[placedCards.length - 2]
+		const placedCard = placedCards[placedCards.length - 1]
+		let placingCard
+
+		switch(placedCard) {
 			case 3:
-				playerCard = enemy1Card;
-				trueCard = true
-				break;
+				function placeableCard(element) {
+					return element >= previousPlacedCard
+				}
+				//alert(enemy1Cards)
+				placingCard = enemy1Cards.find(placeableCard)
+				//alert(placingCard)
+				break
 			case 7:
-				if (7 > enemy1Card) {
+				function placeableCard(element) {
+					return element <= 7
 				}
-				break;
+				placingCard = enemy1Cards.find(placeableCard)
+				break
 			case 8:
-				if (8 > enemy1Card) {
-				turn + 1
-				}
-				break;
+				//For now nothing will be here until multiple enemies are allowed
+				break
 			case 10:
-				placedCards = 0
-				break;
-			case 15:
-				enemy1Cards += placedCards;
-				break;
+				placedCards = []
+				break
+			default:
+				function placeableCard(element) {
+					return element >= placedCard
+				}
+				placingCard = enemy1Cards.find(placeableCard)
+				break
+		}
+	}
+	function cardMath() {
+		const placedCard = placedCards[placedCards.length - 1]
+		const previousPlacedCard = placedCards[placedCards.length - 2]
+		const allowedCard
+
+		switch(placedCard) {
+			case 3:
+				//allowedCard = 
 		}
 	}
 	//Gives the player cards for his deck until he has 3 cards
