@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<body>
+	<!-- creates temporary images for the cards -->
+	<div align="center">
+		<img src="#" id="PlacedDeck" width="300" onclick="takeDeck">
+		<br/>
+		<img src="#" id="temPlayerCard0" width="200" height="240" onclick="tempPlayerCardclicked(0)">
+		<img src="#" id="temPlayerCard1" width="200" height="240" onclick="tempPlayerCardclicked(1)">
+		<img src="#" id="temPlayerCard2" width="200" height="240" onclick="tempPlayerCardclicked(2)">
+		<img src="#" id="temPlayerCard3" width="200" height="240" onclick="tempPlayerCardclicked(3)">
+		<img src="#" id="temPlayerCard4" width="200" height="240" onclick="tempPlayerCardclicked(4)">
+		<img src="#" id="temPlayerCard5" width="200" height="240" onclick="tempPlayerCardclicked(5)">
+		<img src='#' id='playerCard0' width='200' height='240' onclick='playerCardClicked(0)' style="display: none;">
+		<img src='#' id='playerCard1' width='200' height='240' onclick='playerCardClicked(1)' style="display: none;">
+		<img src='#' id='playerCard2' width='200' height='240' onclick='playerCardClicked(2)' style="display: none;">
+		<br/>
+		<img src="CardsImgs\front.png" id="playerDeckCard0" width="100" height="120">
+		<img src="CardsImgs\front.png" id="playerDeckCard1" width="100" height="120">
+		<img src="CardsImgs\front.png" id="playerDeckCard2" width="100" height="120">
+		<br/>
+
+	</div>
+	<script>
+	//Objectives
+		//MAKE ENEMY AI (Hard but rly important)
+		//Add Background img
+		//Change playerCards imgs placing
+		//Change playerDeckCards imgs placing
+		//See playerDeckFaceCards (Still not possible...)
+	//variables
+	let deck = [];
+	let playerCards = [];
+	let playerDeckCards = [];
+	let playerDeckFaceCards = [];
+	let clickedImgs = [];
+	let placedDeck = [];
+	let enemy1Cards = [];
+	let minusNum = 0;
+	let turn = 0;
+	let playerCardChanged = 0;
+	let beginImgs = [0, 1, 2, 3, 4, 5];
+	let clickedCard;
+	const allowedCard = 0
+	//Makes a deck of cards
+		for(i = 2;i <= 14; i++) {
+			deck.push(i + '_of_clubs')
+			deck.push(i + '_of_diamonds')
+			deck.push(i + '_of_hearts')
+			deck.push(i + '_of_spades')
+		}
+		deck.push('15_Black','15_red')
+	//Gives the player 3 cards for his deck 
+		for (let i = 0; i < 3; i++) {
+			let randomCardFromDeck = Math.floor(Math.random() * deck.length);
+			playerDeckCards.push(deck[randomCardFromDeck]);
+			deck.splice(randomCardFromDeck,1);
+		}
+	// gives the player 6 cards to choose from
+		for (let i = 0; i < 6; i++) {
+				let randomCardFromDeck = Math.floor(Math.random() * deck.length);
+				playerCards.push(deck[randomCardFromDeck]);
+				deck.splice(randomCardFromDeck,1);
+				document.getElementById("temPlayerCard"+i).src="cardsImgs/"+playerCards[playerCards.length - 1]+".png"
+		}
+	function cardImgs(playerCardNum) {
+		for(i = 0; i < playerCards.length; i++) {
+			let randomNum03 = Math.floor(Math.random() * 4)
+			switch (randomNum03) {
+				case 0:
+					randomNum03 = "_of_clubs.png";
+					break;
+				case 1:
+					randomNum03 = "_of_diamonds.png"
+					break;
+				case 2:
+					randomNum03 = "_of_hearts.png"
+					break;
+				case 3:
+					randomNum03 = "_of_spades.png"
+					break;
+			}
+			if (playerCards[i] != 15) {
+				document.getElementById("temPlayerCard" + i).src = "CardsImgs/" + playerCards[i] + randomNum03;
+				document.getElementById("playerCard" + i).src = "CardsImgs/" + playerCards[i] + randomNum03;
+			}
+			else {
+				const randomNum01 = Math.floor(Math.random() * 2)
+					if (randomNum01 == 0) {
+						document.getElementById("temPlayerCard" + i).src = "CardsImgs/15_black.png";
+					}
+					else {
+						document.getElementById("temPlayerCard" + i).src = "CardsImgs/15_red.png";
+					}
+					if (randomNum01 == 0) {
+						document.getElementById("playerCard" + i).src = "CardsImgs/15_black.png";
+					}
+					else {
+						document.getElementById("playerCard" + i).src = "CardsImgs/15_red.png";
+				}
+			}
+		}
+	}
+	//Does some things when cards are pressed
+	function tempPlayerCardclicked(playerCardNum) {
+			clickedCard=playerCards[playerCardNum]
+			playerDeckFaceCards.push(clickedCard)
+			document.getElementById("playerDeckCard"+(playerDeckFaceCards.length-1)).src="cardsImgs/"+clickedCard+".png"
+			document.getElementById('temPlayerCard' + playerCardNum).style.display = "none";
+			// when 3 cards are chosen
+			if (playerDeckFaceCards.length == 3) {
+				beginGame = false;
+				for (i = 0; i < 6; i++) {
+					document.getElementById('temPlayerCard' + i).style.display = "none";
+				}
+				for (i = 0; i < playerDeckFaceCards.length; i++) {
+					playerCards.splice(playerCards.indexOf(playerDeckFaceCards[i]),1);
+				}				
+				for (i = 0; i < 3; i++) {
+					document.getElementById("playerCard"+i).style.display="initial";
+					document.getElementById("playerCard"+i).src="cardsImgs/"+playerCards[i]+".png"
+				}
+
+				//cardImgs(playerCardNum)
+				alert('Let the game begin');
+			}
+	}
+	function playerCardClicked(playerCardNum) {
+			const removedCard = playerCards[playerCardNum];
+			if (trueCard(removedCard)) {
+				allowedCard = cardMath(removedCard)
+				placedDeck.push(removedCard)
+				document.getElementById("PlacedDeck").style.display="initial";
+				document.getElementById("PlacedDeck").src="cardsImgs/"+removedCard+".png";
+				let randomCardFromDeck = Math.floor(Math.random() * deck.length);
+				playerCards[playerCardNum]=deck[randomCardFromDeck];
+				deck.splice(randomCardFromDeck,1);
+				document.getElementById("playerCard"+playerCardNum).src="cardsImgs/"+playerCards[playerCardNum]+".png"
+			} else {
+				alert('You can\'t put this card on the deck. try an different card or take the deck')
+			}
+	}
+	function trueCard(cardToCheck) {
+		//let previousPlacedCard = placedDeck[placedDeck.length - 1]
+		let previousPlacedCard = 0
+
+		switch(cardToCheck) {
+			case 2:
+				return true
+				break
+
+			case 3:
+				return true
+				break
+				
+			case 10:
+				return true
+				break
+
+			default:
+				if (previousPlacedCard == 7) {
+					if (cardToCheck <= 7) {
+						return true
+					} else {
+						return false
+					}
+				} else if (cardToCheck >= previousPlacedCard) {
+					return true
+				}
+				break
+		}
+	}
+	function cardMath(cardToCheck) {
+		const previousPlacedCard = placedDeck[placedDeck.length - 1]
+		let allowedCard
+
+		switch (cardToCheck) {
+			case 2:
+				allowedCard = 0
+				break;
+
+			case 3:
+				allowedCard = previousPlacedCard
+				break
+
+			case 10:
+				placedDeck = []
+				allowedCard = 0
+				break
+
+			default:
+				allowedCard = cardToCheck
+				break
+		}
+		return allowedCard
+	}
+	function takeDeck() {
+		playerCards.push(deck)
+		alert(playerCards)
+	}
+	//Gives the player cards until he has 6 cards
+	//puts the correct pictures on the cards
+	let beginGame = true;
+	//cardImgs()
+	alert('Put three cards on your deck');
+	</script>
+	</body>
+</html>
